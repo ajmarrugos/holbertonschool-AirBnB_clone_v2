@@ -133,7 +133,7 @@ class HBNBCommand(cmd.Cmd):
         for key in next_params:
             tkn = key.split("=")
             if type(tkn) in ValueType:
-                setattr:(new_instance, tkn[0], token[1])
+                setattr(new_instance, tkn[0], token[1])
             else:
                 str = tkn[1].strip('"')
                 new_str = str.replace('_', ' ')
@@ -203,7 +203,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del(storage.all()[key])
+            del (storage.all()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
@@ -335,6 +335,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
