@@ -7,11 +7,12 @@ from sqlalchemy import Column, String, ForeignKey
 
 class State(BaseModel, Base):
     """ State class """
+    __tablename__ = 'states'
+
     if getenv('HBNB_TYPE_STORAGE') == 'db':
         @property
         def cities(self):
             """ Getter method """
-                pass
+            pass
 
-    __tablename__ = 'states'
     name = Column(String(128), nullable=False)
