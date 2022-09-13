@@ -12,7 +12,7 @@ def index():
 
 @app.route('/hbnb', strict_slashes=False)
 def index_01():
-    """Allows the route '/hbnb' to return text""""
+    """Allows the route '/hbnb' to return text"""
     return 'HBNB'
 
 
