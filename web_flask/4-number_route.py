@@ -32,7 +32,7 @@ def index_03(text='is cool'):
 @app.route('/number/<int:n>', strict_slashes=False)
 def index_04(n):
     """Allows the route '/number/' to return given integer inside the page"""
-    return '{} is a number'.format(n)
+    return '{:d} is a number'.format(n)
 
 
 if __name__ == '__main__':
