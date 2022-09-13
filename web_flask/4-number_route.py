@@ -29,7 +29,7 @@ def index_03(text='is cool'):
     return 'Python ' + text.replace('_', ' ')
 
 
-@procFlask.route('/number/<int:n>', strict_slashes=False)
+@app.route('/number/<int:n>', strict_slashes=False)
 def index_04(n):
     """Allows the route '/number/' to return given integer inside the page"""
     return '{} is a number'.format(n)
