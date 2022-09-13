@@ -6,22 +6,26 @@ app = Flask(__name__)
 
 @app.route('/', strict_slashes=False)
 def index():
+    """Allows the root route '/' to return text"""
     return 'Hello HBNB!'
 
 
 @app.route('/hbnb', strict_slashes=False)
 def index_01():
+    """Allows the route '/hbnb' to return text""""
     return 'HBNB'
 
 
 @app.route('/c/<text>', strict_slashes=False)
 def index_02(text):
+    """Allows the route '/c/' to return given text inside the page"""
     return 'C {}'.format(text.replace('_', ' '))
 
 
 @app.route('/python', strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
 def index_03(text='is cool'):
+    """Allows the route '/python/' to return given text inside the page"""
     return 'Python ' + text.replace('_', ' ')
 
 

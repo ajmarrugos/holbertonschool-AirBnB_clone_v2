@@ -5,7 +5,8 @@ app = Flask(__name__)
 
 
 @app.route('/', strict_slashes=False)
-def Hello():
+def index():
+    """Allows the root route '/' to return text"""
     return 'Hello HBNB!'
 
 

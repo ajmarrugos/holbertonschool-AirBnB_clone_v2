@@ -5,12 +5,14 @@ app = Flask(__name__)
 
 
 @app.route('/', strict_slashes=False)
-def Hello():
+def index():
+    """Allows the root route '/' to return text"""
     return 'Hello HBNB!'
 
 
 @app.route('/hbnb', strict_slashes=False)
-def Hello_hbnb():
+def index_01():
+    """Allows the route '/hbnb' to return text""""
     return 'HBNB'
 
 
