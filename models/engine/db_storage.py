@@ -1,13 +1,34 @@
 #!/usr/bin/python3
 """ New Engine as DBStorage """
 from os import getenv
-from sqlalchemy import create_engine
-from sqlalchemy.schema import MetaData
-
-engine = create_engine('')
+from models.user import User
+from models.city import City
+from models.state import State
+from models.place import Place
+from models.review import Review
+from models.amenity import Amenity
+from models.base_model import Base
 
 
 class DBStorage:
-    """"DBStorage """
+    """This class defines the DBStorage"""
     __engine = None
     __session = None
+
+    def __init__(self):
+        """Function called every time a new object is created"""
+        user = getenv("HBNB_MYSQL_USER")
+        passwd = getenv("HBNB_MYSQL_PWD")
+        host = getenv("HBNB_MYSQL_HOST")
+        database = getenv("HBNB_MYSQL_DB")
+        env = getenv("HBNB_ENV")
+
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(
+            user, pwd, host, database), pool_pre_ping=True)
+        Base.metadata.create_all(self.__engine)
+
+        """If 'Test mode' drop all tables"""
+        if env == 'test':
+            Base.metadata.drop_all(self.__engine)
+        Session = sessionmaker(bind=self.__engine)
+        self.__session = Session()
