@@ -131,7 +131,7 @@ class HBNBCommand(cmd.Cmd):
             key[1] = key[1].replace('\"', '')
             key[1] = key[1].replace('_', ' ')
             param[key[0]] = key[1]
-            
+
         new_instance = HBNBCommand.classes[args[0]](**param)
         new_instance.save()
         print(new_instance.id)
