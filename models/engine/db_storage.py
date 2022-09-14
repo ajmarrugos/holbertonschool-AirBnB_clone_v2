@@ -44,3 +44,19 @@ class DBStorage:
             objs = []
             for cls in classes:
                 objs += self.__session.query(cls)
+
+    def all(self, cls=None):
+        """ShowS all data from defined classes"""
+        if cls:
+            objs = self.__session.query(cls).all()
+
+        else:
+            classes = [State, City, User, Place, Review, Amenity]
+            objs = []
+            for cls in classes:
+                objs += self.__session.query(cls)
+
+    def new(self, obj):
+        """Creates a new instance of the class passed as an argument"""
+        if obj:
+            self.__session.add(obj)
