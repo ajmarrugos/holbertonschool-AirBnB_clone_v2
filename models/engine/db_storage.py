@@ -60,3 +60,7 @@ class DBStorage:
         """Creates a new instance of the class passed as an argument"""
         if obj:
             self.__session.add(obj)
+
+    def save(self):
+        """Commit all changes of the current database session"""
+        self.__session.commit()
