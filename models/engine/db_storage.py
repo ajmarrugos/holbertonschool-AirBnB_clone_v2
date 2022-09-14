@@ -8,7 +8,8 @@ from models.place import Place
 from models.review import Review
 from models.amenity import Amenity
 from models.base_model import Base
-
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, Session, scoped_session, relationship
 
 class DBStorage:
     """This class defines the DBStorage"""
@@ -32,3 +33,14 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
         Session = sessionmaker(bind=self.__engine)
         self.__session = Session()
+
+    def all(self, cls=None):
+        """Shows all data from defined classes"""
+        if cls:
+            objs = self.__session.query(cls).all()
+
+        else:
+            classes = [State, City, User, Place, Review, Amenity]
+            objs = []
+            for cls in classes:
+                objs += self.__session.query(cls)
