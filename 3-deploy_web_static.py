@@ -1,50 +1,52 @@
 #!/usr/bin/python3
 """Deployment process: Stage 3"""
-import datetime
-from os import path
+import time
+from os.path import exists
 from fabric.api import run, put, local, env
 
-env.hosts = ['35.196.3.36', '204.236.195.39']
+env.hosts = ['34.203.35.182', '54.91.166.190']
 
 
 def do_pack():
     """Returns the file path if has been correctly generated.
     Otherwise, returns none"""
-    local("mkdir -p versions")
-    date = datetime.strftime(datetime.now(), '%Y%m%d%H%M%S')
-    file = local("tar -cvzf versions/web_static_{}.tgz web_static"
-                 .format(datetime.strftime(datetime.now(), '%Y%m%d%H%M%S')))
-    if file.failed:
+    timest = time.strftime("%Y%m%d%H%M%S")
+    try:
+        local("mkdir -p versions")
+        local("tar -cvzf versions/web_static_{}.tgz web_static/".
+              format(timest))
+        return ("versions/web_static_{:s}.tgz".format(timest))
+    except Exception:
         return None
-    return ("versions/web_static_{}.tgz".format(date))
 
 
 def do_deploy(archive_path):
     """Recieves an archive pack and deploys it to the web server"""
-    if not path.exists(archive_path):
+    if not exists(archive_path):
         return False
-    archive_nom = archive_path.split('/')[1]
-    archive_nom_noext = archive_path.split('/')[1].split('.')[0]
-    to_path = '/data/web_static/releases/' + archive_nom_noext
-    up_path = '/tmp/' + archive_nom
-    put(archive_path, up_path)
-    run('mkdir -p ' + to_path)
-    run('tar -xzf ' + up_path + ' -C ' + to_path)
-    run('rm ' + up_path)
-    run('mv ' + to_path + '/web_static/* ' + to_path + '/')
-    run('rm -rf ' + to_path + '/web_static')
-    run('rm -rf /data/web_static/current')
-    run('ln -s ' + to_path + ' /data/web_static/current')
-    return True
+
+    try:
+        file_n = archive_path.split("/")[-1]
+        no_ext = file_n.split(".")[0]
+        path = "/data/web_static/releases/"
+        put(archive_path, '/tmp/')
+        run('mkdir -p {}{}/'.format(path, no_ext))
+        run('tar -xzf /tmp/{} -C {}{}/'.format(file_n, path, no_ext))
+        run('rm /tmp/{}'.format(file_n))
+        run('mv {0}{1}/web_static/* {0}{1}/'.format(path, no_ext))
+        run('rm -rf {}{}/web_static'.format(path, no_ext))
+        run('rm -rf /data/web_static/current')
+        run('ln -s {}{}/ /data/web_static/current'.format(path, no_ext))
+        return True
+    except:
+        return False
 
 
 
 def deploy():
     """Deploy function with do_pack and do_deploy"""
-    route = do_pack()
-    if route is None:
+    archive_path = do_pack()
+    if archive_path is None:
         return False
-    dep = do_deploy(route)
-    if dep is False:
-        return False
-    return dep
+
+    return(do_deploy(archive_path))
