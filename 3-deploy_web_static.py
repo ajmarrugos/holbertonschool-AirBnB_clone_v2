@@ -22,7 +22,7 @@ def do_pack():
 
 def do_deploy(archive_path):
     """Recieves an archive pack and deploys it to the web server"""
-    if not exists(archive_path):
+    if exists(archive_path) is False:
         return False
 
     try:
