@@ -1,16 +1,17 @@
 #!/usr/bin/python3
 """Deployment process: Stage 1"""
-import datetime
+import time
 from fabric.api import local
 
 
 def do_pack():
     """Returns the file path if has been correctly generated.
     Otherwise, returns none"""
-    local("mkdir -p versions")
-    date = datetime.strftime(datetime.now(), '%Y%m%d%H%M%S')
-    file = local("tar -cvzf versions/web_static_{}.tgz web_static"
-                 .format(datetime.strftime(datetime.now(), '%Y%m%d%H%M%S')))
-    if file.failed:
+    timest = time.strftime("%Y%m%d%H%M%S")
+    try:
+        local("mkdir -p versions")
+        local("tar -cvzf versions/web_static_{}.tgz web_static/".
+              format(timest))
+        return ("versions/web_static_{:s}.tgz".format(timest))
+    except Exception:
         return None
-    return ("versions/web_static_{}.tgz".format(date))
