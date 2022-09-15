@@ -7,19 +7,6 @@ from fabric.api import run, put, local, env
 env.hosts = ['34.203.35.182', '54.91.166.190']
 
 
-def do_pack():
-    """Returns the file path if has been correctly generated.
-    Otherwise, returns none"""
-    timest = time.strftime("%Y%m%d%H%M%S")
-    try:
-        local("mkdir -p versions")
-        local("tar -cvzf versions/web_static_{}.tgz web_static/".
-              format(timest))
-        return ("versions/web_static_{:s}.tgz".format(timest))
-    except Exception:
-        return None
-
-
 def do_deploy(archive_path):
     """Recieves an archive pack and deploys it to the web server"""
     if not exists(archive_path):
