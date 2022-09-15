@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Deployment process: Stage 2"""
 import time
-from os import path
+from os.path import exists
 from fabric.api import run, put, local, env
 
 env.hosts = ['35.196.3.36', '204.236.195.39']
@@ -22,18 +22,25 @@ def do_pack():
 
 def do_deploy(archive_path):
     """Recieves an archive pack and deploys it to the web server"""
-    if not path.exists(archive_path):
+    if not exists(archive_path):
         return False
-    archive_nom = archive_path.split('/')[1]
-    archive_nom_noext = archive_path.split('/')[1].split('.')[0]
-    to_path = '/data/web_static/releases/' + archive_nom_noext
-    up_path = '/tmp/' + archive_nom
-    put(archive_path, up_path)
-    run('mkdir -p ' + to_path)
-    run('tar -xzf ' + up_path + ' -C ' + to_path)
-    run('rm ' + up_path)
-    run('mv ' + to_path + '/web_static/* ' + to_path + '/')
-    run('rm -rf ' + to_path + '/web_static')
-    run('rm -rf /data/web_static/current')
-    run('ln -s ' + to_path + ' /data/web_static/current')
-    return True
+
+    try:
+        put(archive_path, '/tmp/')
+
+        file = archive_path.split('/')[-1].split('.')[0]
+        run('mkdir -p /data/web_static/releases/{}/'.format(file))
+        run('tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}'
+            .format(file, file))
+        run('rm /tmp/{}.tgz'.format(file))
+        run('mv /data/web_static/releases/{}/web_static/* \
+            /data/web_static/releases/{}'.format(file, file))
+        run('rm -rf /data/web_static/releases/{}/web_static'.format(file))
+        run('rm -rf /data/web_static/current')
+        run('ln -s /data/web_static/releases/{}\
+            /data/web_static/current'.format(file))
+        return True
+
+    except Exception as exc:
+        print(exc)
+        return False
