@@ -2,7 +2,7 @@
 """Deployment process: Stage 2"""
 import time
 from os.path import exists
-from fabric.api import run, put, local, env
+from fabric.api import run, put, env
 
 env.hosts = ['34.203.35.182', '54.91.166.190']
 
